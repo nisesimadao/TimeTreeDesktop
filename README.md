@@ -8,9 +8,8 @@ TimeTree Desktopは、人気のカレンダーアプリTimeTreeをデスクト�
 <img width="900" height="604" alt="Windows版のプレビュー、ライトモード" src="https://github.com/user-attachments/assets/495c048d-6155-4ed0-bc2e-59ee0128f952" />
 
 ### Mac版
-<img width="1312" height="912" alt="Mac版のプレビュー" src="https://github.com/user-attachments/assets/8a3ed6f1-60dd-4e6b-869a-ce5d8dee151f" />
-
-
+<img width="1312" height="912" alt="Mac版のプレビュー、ダークモード" src="https://github.com/user-attachments/assets/8a3ed6f1-60dd-4e6b-869a-ce5d8dee151f" />
+<img width="1312" height="912" alt="Mac版のプレビュー、ライトモード" src="https://github.com/user-attachments/assets/e94334b2-1ba5-47fe-a0d2-bbdb79d94f21" />
 
 ## 機能
 - **Macスタイルカスタムタイトルバー**: 最小化、最大化/元に戻す、閉じるボタンがMac標準の赤・黄・緑の円形デザインで表示されます。

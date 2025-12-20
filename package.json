@@ -1,0 +1,40 @@
+{
+  "name": "timetree-desktop",
+  "version": "1.0.0",
+  "description": "A desktop app for TimeTree.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --mac"
+  },
+  "keywords": [
+    "timetree",
+    "electron"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^31.0.1",
+    "electron-builder": "^24.13.3"
+  },
+  "dependencies": {
+    "darkreader": "^4.9.118"
+  },
+  "build": {
+    "appId": "com.nisesimadao.timetree.desktop",
+    "productName": "TimeTree Desktop",
+    "asar": true,
+    "files": [
+      "**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        }
+      ]
+    }
+  }
+}

@@ -28,13 +28,20 @@
       "**/*"
     ],
     "mac": {
+      "icon": "icon.png",
       "category": "public.app-category.productivity",
       "target": [
         {
           "target": "dmg",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         }
       ]
+    },
+    "win": {
+      "icon": "icon.png"
     }
   }
 }

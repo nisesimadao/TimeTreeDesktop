@@ -27,33 +27,37 @@ function createWindow() {
     );
 
     // ページにDarkReaderを注入し、Dynamic Modeを有効にする
-    mainWindow.webContents.executeJavaScript(`
-      (() => {
-        const script = document.createElement('script');
-        script.textContent = ${JSON.stringify(darkreaderBundle)};
-        document.documentElement.appendChild(script);
+    try {
+      mainWindow.webContents.executeJavaScript(`
+        (() => {
+          const script = document.createElement('script');
+          script.textContent = ${JSON.stringify(darkreaderBundle)};
+          document.documentElement.appendChild(script);
 
-        // システムのテーマ設定に合わせてDarkReaderを有効/無効にする関数
-        window.applyDarkReaderTheme = (isDark) => {
-          if (isDark) {
-            // ★ これが無いと必ず壊れる
-            DarkReader.setFetchMethod(window.fetch);
+          // システムのテーマ設定に合わせてDarkReaderを有効/無効にする関数
+          window.applyDarkReaderTheme = (isDark) => {
+            if (isDark) {
+              // ★ これが無いと必ず壊れる
+              DarkReader.setFetchMethod(window.fetch);
 
-            DarkReader.enable({
-              mode: 1, // Dynamic Mode
-              brightness: 110,
-              contrast: 90,
-              sepia: 0
-            });
-          } else {
-            DarkReader.disable();
-          }
-        };
+              DarkReader.enable({
+                mode: 1, // Dynamic Mode
+                brightness: 110,
+                contrast: 90,
+                sepia: 0
+              });
+            } else {
+              DarkReader.disable();
+            }
+          };
 
-        // ロード完了時の初期テーマ適用
-        window.applyDarkReaderTheme(${nativeTheme.shouldUseDarkColors});
-      })();
-    `).catch(console.error);
+          // ロード完了時の初期テーマ適用
+          window.applyDarkReaderTheme(${nativeTheme.shouldUseDarkColors});
+        })();
+      `).catch(error => console.error('DarkReader executeJavaScript error in renderer:', error));
+    } catch (e) {
+      console.error('Error injecting DarkReader script:', e);
+    }
 
     // Dark Readerが誤認識するオーバーレイのCSSを無効化
     mainWindow.webContents.insertCSS(`
@@ -68,54 +72,57 @@ function createWindow() {
     `).catch(console.error); // insertCSSのpromiseもcatch
 
     // カスタムタイトルバーのHTMLを注入
-    mainWindow.webContents.executeJavaScript(`
-      const titleBarHtml = ${JSON.stringify(`
-        <div id="custom-title-bar">
-          <div class="title-bar-buttons-left">
-            <button id="close-btn" class="mac-button mac-close" title="閉じる"></button>
-            <button id="minimize-btn" class="mac-button mac-minimize" title="最小化"></button>
-            <button id="maximize-restore-btn" class="mac-button mac-maximize" title="最大化/元に戻す"></button>
+    try {
+      mainWindow.webContents.executeJavaScript(`
+        const titleBarHtml = ${JSON.stringify(`
+          <div id="custom-title-bar">
+            <div class="title-bar-buttons-left">
+              <button id="close-btn" class="mac-button mac-close" title="閉じる"></button>
+              <button id="minimize-btn" class="mac-button mac-minimize" title="最小化"></button>
+              <button id="maximize-restore-btn" class="mac-button mac-maximize" title="最大化/元に戻す"></button>
+            </div>
+            <div class="title-bar-title"></div>
+            <div class="title-bar-drag-region-right"></div>
           </div>
-          <div class="title-bar-title"></div>
-          <div class="title-bar-drag-region-right"></div>
-        </div>
-      `)};
-      document.body.insertAdjacentHTML('afterbegin', titleBarHtml);
+        `)};
+        document.body.insertAdjacentHTML('afterbegin', titleBarHtml);
 
-      // ボタンのイベントリスナーを設定
-      document.getElementById('minimize-btn').addEventListener('click', () => {
-        window.electronAPI.sendWindowControl('minimize');
-      });
-      document.getElementById('maximize-restore-btn').addEventListener('click', () => {
-        window.electronAPI.sendWindowControl('maximize-restore');
-      });
-      document.getElementById('close-btn').addEventListener('click', () => {
-        window.electronAPI.sendWindowControl('close');
-      });
-
-      // ページのタイトルをカスタムタイトルバーに表示
-      const titleBarTitle = document.querySelector('.title-bar-title');
-        titleBarTitle.textContent = document.title + ' Created by @nisesimadao';
-
-        const observer = new MutationObserver((mutations) => {
-          mutations.forEach((mutation) => {
-            if (mutation.target.nodeName === 'TITLE') {
-              titleBarTitle.textContent = document.title + ' Created by @nisesimadao';
-            }
-          });
+        // ボタンのイベントリスナーを設定
+        document.getElementById('minimize-btn').addEventListener('click', () => {
+          window.electronAPI.sendWindowControl('minimize');
+        });
+        document.getElementById('maximize-restore-btn').addEventListener('click', () => {
+          window.electronAPI.sendWindowControl('maximize-restore');
+        });
+        document.getElementById('close-btn').addEventListener('click', () => {
+          window.electronAPI.sendWindowControl('close');
         });
 
-        // <head> 要素内の <title> タグを監視
-        const titleElement = document.querySelector('head > title');
-        if (titleElement) {
-          observer.observe(titleElement, { childList: true, subtree: true, characterData: true });
-        } else {
-          // titleタグがない場合、body要素全体を監視する（パフォーマンスは劣る）
-          // より堅牢にするには、preloadスクリプトでipcRendererを使ってメインプロセスからタイトルを受け取る方法も検討
-          observer.observe(document.body, { childList: true, subtree: true, characterData: true });
-        }
-      }
-    `).catch(console.error);
+        // ページのタイトルをカスタムタイトルバーに表示
+        const titleBarTitle = document.querySelector('.title-bar-title');
+          titleBarTitle.textContent = document.title + ' Desktop Mod Created by @nisesimadao';
+
+          const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.target.nodeName === 'TITLE') {
+                titleBarTitle.textContent = document.title + ' Desktop Mod Created by @nisesimadao';
+              }
+            });
+          });
+
+          // <head> 要素内の <title> タグを監視
+          const titleElement = document.querySelector('head > title');
+          if (titleElement) {
+            observer.observe(titleElement, { childList: true, subtree: true, characterData: true });
+          } else {
+            // titleタグがない場合、body要素全体を監視する（パフォーマンスは劣る）
+            // より堅牢にするには、preloadスクリプトでipcRendererを使ってメインプロセスからタイトルを受け取る方法も検討
+            observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+          }
+      `).catch(error => console.error('Custom Title Bar executeJavaScript error in renderer:', error));
+    } catch (e) {
+      console.error('Error injecting Custom Title Bar script:', e);
+    }
 
     // カスタムタイトルバーのCSSを注入
     mainWindow.webContents.insertCSS(`

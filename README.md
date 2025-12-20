@@ -1,7 +1,11 @@
-# TimeTree Desktop
 
 ## 概要
 TimeTree Desktopは、人気のカレンダーアプリTimeTreeをデスクトップアプリケーションとして利用するためのElectronベースのプロジェクトです。ウェブ版TimeTreeの機能に加えて、Macスタイルのカスタムタイトルバー、動的なタイトル表示、システムフォントの統合など、デスクトップ環境に最適化された体験を提供します。
+
+## プレビュー
+### Windows版
+<img width="1800" height="1200" alt="Windows版のプレビュー" src="https://github.com/user-attachments/assets/0a64bc1a-5dc7-4e80-a1c7-025884c584e4" />
+
 
 ## 機能
 - **Macスタイルカスタムタイトルバー**: 最小化、最大化/元に戻す、閉じるボタンがMac標準の赤・黄・緑の円形デザインで表示されます。

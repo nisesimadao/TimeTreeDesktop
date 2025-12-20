@@ -5,6 +5,9 @@ TimeTree Desktopは、人気のカレンダーアプリTimeTreeをデスクト�
 ## プレビュー
 ### Windows版
 <img width="1800" height="1200" alt="Windows版のプレビュー" src="https://github.com/user-attachments/assets/0a64bc1a-5dc7-4e80-a1c7-025884c584e4" />
+### Mac版
+<img width="1312" height="912" alt="Mac版のプレビュー" src="https://github.com/user-attachments/assets/8a3ed6f1-60dd-4e6b-869a-ce5d8dee151f" />
+
 
 
 ## 機能
